@@ -16,6 +16,8 @@ from .sqlite_util import sqlite_setup
 ogr.UseExceptions()
 osr.UseExceptions()
 
+import logging
+log = logging.getLogger("my_logger")
 
 class Vector(object):
     """
@@ -785,51 +787,77 @@ def boundary(vectorobject, expression=None, outname=None):
     Vector or None
         if `outname` is `None`, a vector object pointing to an in-memory dataset else `None`
     """
+    
+    log.info("flibli 1")
+    
     largest = None
     area = None
+    log.info("flibli 2")
     vectorobject.layer.ResetReading()
+    log.info("flibli 3")
     if expression is not None:
         vectorobject.layer.SetAttributeFilter(expression)
+    log.info("flibli 4")
     for feat in vectorobject.layer:
+        log.info("flibli 4-1")
         geom = feat.GetGeometryRef()
+        log.info("flibli 4-2")
         geom_area = geom.GetArea()
+        log.info("flibli 4-3")
         if (largest is None) or (geom_area > area):
             largest = feat.GetFID()
             area = geom_area
+        log.info("flibli 4-4")
     if expression is not None:
+        log.info("flibli 5")
         vectorobject.layer.SetAttributeFilter('')
+        log.info("flibli 6")
     vectorobject.layer.ResetReading()
-    
+    log.info("flibli 7")
     feat_major = vectorobject.layer.GetFeature(largest)
+    log.info("flibli 8")
     major = feat_major.GetGeometryRef()
-    
+    log.info("flibli 9")
     boundary = major.Boundary()
+    log.info("flibli 10")
     if boundary.GetGeometryName() == 'LINESTRING':
+        log.info("flibli 11-a")
         longest = boundary
+        log.info("flibli 11-b")
     else:  # MULTILINESTRING
+        log.info("flibli 12-a")
         longest = None
         for line in boundary:
             if (longest is None) or (line.Length() > longest.Length()):
                 longest = line
-    
+        log.info("flibli 12-b")
+    log.info("flibli 13")
     points = longest.GetPoints()
+    log.info("flibli 14")
     ring = ogr.Geometry(ogr.wkbLinearRing)
-    
+    log.info("flibli 15")
     for point in points:
         ring.AddPoint_2D(*point)
+    log.info("flibli 16")
     ring.CloseRings()
+    log.info("flibli 17")
     
     poly = ogr.Geometry(ogr.wkbPolygon)
+    log.info("flibli 18")
     poly.AddGeometry(ring)
-    
+    log.info("flibli 19")
     vec_out = Vector(driver='Memory')
+    log.info("flibli 20")
     vec_out.addlayer('layer',
                      vectorobject.layer.GetSpatialRef(),
                      poly.GetGeometryType())
+    log.info("flibli 21")
     vec_out.addfield('area', ogr.OFTReal)
+    log.info("flibli 22")
     fields = {'area': poly.Area()}
+    log.info("flibli 23")
     vec_out.addfeature(poly, fields=fields)
-    
+    log.info("flibli 24")
     ring = None
     geom = None
     line = None
@@ -838,13 +866,13 @@ def boundary(vectorobject, expression=None, outname=None):
     boundary = None
     major = None
     feat_major = None
-    
+    log.info("flibli 25")
     if outname is not None:
         vec_out.write(outname)
         vec_out.close()
     else:
         return vec_out
-
+    log.info("flibli 26")
 
 def centerdist(obj1, obj2):
     if not isinstance(obj1, Vector) or isinstance(obj2, Vector):
