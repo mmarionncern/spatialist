@@ -17,7 +17,7 @@ ogr.UseExceptions()
 osr.UseExceptions()
 
 import logging
-log = logging.getLogger("my_logger")
+log = logging.getLogger(__name__)
 
 class Vector(object):
     """
