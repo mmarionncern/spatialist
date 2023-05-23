@@ -107,6 +107,7 @@ class Vector(object):
         self.close()
     
     def __str__(self):
+        log.info("flibilili")
         vals = dict()
         vals['proj4'] = self.proj4
         vals.update(self.extent)
@@ -118,6 +119,7 @@ class Vector(object):
                'extent        : {xmin:.3f}, {xmax:.3f}, {ymin:.3f}, {ymax:.3f} (xmin, xmax, ymin, ymax)\n' \
                'coord. ref.   : {proj4}\n' \
                'data source   : {filename}'.format(**vals)
+        log.info("flibililiblblblb")
         return info
     
     @staticmethod
