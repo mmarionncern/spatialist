@@ -800,9 +800,13 @@ def boundary(vectorobject, expression=None, outname=None):
     area = None
     log.info("flibli 2")
     vectorobject.layer.ResetReading()
+    log.info(vectorobject.vector.GetLayerCount())
+    log.info(vectorobject.layer)
     log.info("flibli 3")
     if expression is not None:
         vectorobject.layer.SetAttributeFilter(expression)
+    log.info(vectorobject.vector.GetLayerCount())
+    log.info(vectorobject.layer)
     log.info("flibli 4")
     for feat in vectorobject.layer:
         log.info(feat)
