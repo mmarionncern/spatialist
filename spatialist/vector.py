@@ -801,11 +801,14 @@ def boundary(vectorobject, expression=None, outname=None):
         vectorobject.layer.SetAttributeFilter(expression)
     log.info("flibli 4")
     for feat in vectorobject.layer:
+        log.info(feat)
         log.info("flibli 4-1")
         geom = feat.GetGeometryRef()
         log.info("flibli 4-2")
         geom_area = geom.GetArea()
         log.info("flibli 4-3")
+        log.info(geom_area)
+        log.info(area)
         if (largest is None) or (geom_area > area):
             largest = feat.GetFID()
             area = geom_area
@@ -816,6 +819,7 @@ def boundary(vectorobject, expression=None, outname=None):
         log.info("flibli 6")
     vectorobject.layer.ResetReading()
     log.info("flibli 7")
+    log.info(largest)
     feat_major = vectorobject.layer.GetFeature(largest)
     log.info("flibli 8")
     major = feat_major.GetGeometryRef()
