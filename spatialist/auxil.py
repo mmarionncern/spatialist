@@ -12,6 +12,8 @@ osr.UseExceptions()
 ogr.UseExceptions()
 gdal.UseExceptions()
 
+import logging
+log = logging.getLogger(__name__)
 
 def crsConvert(crsIn, crsOut, wkt_format='DEFAULT'):
     """
@@ -56,11 +58,15 @@ def crsConvert(crsIn, crsOut, wkt_format='DEFAULT'):
     >>> crsConvert('EPSG:4326+5773', 'proj4')
     '+proj=longlat +datum=WGS84 +geoidgrids=us_nga_egm96_15.tif +vunits=m +no_defs'
     """
+    log.info("--->>>><<<<<----")
+    log.info(crsIn)
+    log.info(crsOut)
     if isinstance(crsIn, osr.SpatialReference):
         srs = crsIn.Clone()
     else:
         srs = osr.SpatialReference()
         
+        log.info(srs)
         if isinstance(crsIn, int):
             crsIn = 'EPSG:{}'.format(crsIn)
         
@@ -363,6 +369,7 @@ def __osr2epsg(srs):
     ------
     RuntimeError
     """
+    log.info("SRS ------------------------")
     srs = srs.Clone()
     try:
         try:
@@ -371,11 +378,14 @@ def __osr2epsg(srs):
             # Sometimes EPSG identification might fail
             # but a match exists for which it does not.
             matches = srs.FindMatches()
+            log.info(matches)
             for srs, confidence in matches:
                 if confidence == 100:
                     srs.AutoIdentifyEPSG()
                     break
+        log.info(srs)
         code = int(srs.GetAuthorityCode(None))
+        log.info(code)
         # make sure the EPSG code actually exists
         srsTest = osr.SpatialReference()
         srsTest.ImportFromEPSG(code)
