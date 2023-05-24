@@ -804,6 +804,7 @@ def boundary(vectorobject, expression=None, outname=None):
     log.info(vectorobject.layer)
     log.info(vectorobject.layer.GetFeatureCount())
     log.info("flibli 3")
+    log.info(expression)
     if expression is not None:
         vectorobject.layer.SetAttributeFilter(expression)
     log.info(vectorobject.vector.GetLayerCount())
