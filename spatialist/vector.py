@@ -53,8 +53,10 @@ class Vector(object):
         self.driver = ogr.GetDriverByName(driver)
         
         self.vector = self.driver.CreateDataSource('out') if driver == 'Memory' else self.driver.Open(filename)
-        
+
         nlayers = self.vector.GetLayerCount()
+        log.info("yoloooooo")
+        log.info(nlayers)
         if nlayers > 1:
             raise RuntimeError('multiple layers are currently not supported')
         elif nlayers == 1:
@@ -1141,17 +1143,27 @@ def vectorize(target, reference, outname=None, layername='layer', fieldname='val
     outband = tmp.GetRasterBand(1)
     outband.WriteArray(target, 0, 0)
     
+    log.info(layername)
+    log.info(proj)
+    log.info(fieldname)
+    
     try:
         with Vector(driver='Memory') as vec:
+            log.info("yolooo1")
             vec.addlayer(name=layername, srs=proj,
                          geomType=ogr.wkbPolygon)
+            log.info("yolooo2")
             vec.addfield(fieldname, ogr.OFTInteger)
-            
+            log.info("yolooo3")
             gdal.Polygonize(srcBand=outband, maskBand=None,
                             outLayer=vec.layer, iPixValField=0)
+            log.info("yolooo4")
             if outname is not None:
+                log.info("yolooo5")
                 vec.write(outfile=outname, driver=driver)
+                log.info("yolooo5-a")
             else:
+                log.info("yolooo6")
                 return vec.clone()
     except Exception as e:
         raise e
