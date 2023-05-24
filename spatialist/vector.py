@@ -793,6 +793,8 @@ def boundary(vectorobject, expression=None, outname=None):
     """
     
     log.info("flibli 1")
+    log.info(vectorobject.vector.GetLayerCount())
+    log.info(vectorobject.layer)
     
     largest = None
     area = None
