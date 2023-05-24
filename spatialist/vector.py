@@ -794,7 +794,7 @@ def boundary(vectorobject, expression=None, outname=None):
     
     log.info("flibli 1")
     log.info(vectorobject.vector.GetLayerCount())
-    log.info(vectorobject.layer)
+    log.info(vectorobject.layer.GetFeatureCount())
     
     largest = None
     area = None
@@ -802,11 +802,13 @@ def boundary(vectorobject, expression=None, outname=None):
     vectorobject.layer.ResetReading()
     log.info(vectorobject.vector.GetLayerCount())
     log.info(vectorobject.layer)
+    log.info(vectorobject.layer.GetFeatureCount())
     log.info("flibli 3")
     if expression is not None:
         vectorobject.layer.SetAttributeFilter(expression)
     log.info(vectorobject.vector.GetLayerCount())
     log.info(vectorobject.layer)
+    log.info(vectorobject.layer.GetFeatureCount())
     log.info("flibli 4")
     for feat in vectorobject.layer:
         log.info(feat)
@@ -1149,9 +1151,12 @@ def vectorize(target, reference, outname=None, layername='layer', fieldname='val
     outband = tmp.GetRasterBand(1)
     outband.WriteArray(target, 0, 0)
     
+    log.info("das ist penible")
     log.info(layername)
     log.info(proj)
     log.info(fieldname)
+    log.info(meta)
+    log.info(outband)
     
     try:
         with Vector(driver='Memory') as vec:
